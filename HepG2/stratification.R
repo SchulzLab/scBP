@@ -47,16 +47,16 @@ minus <- read.table("HepG2_scell_minus_transcript_expression.txt",header=T,row.n
 plus$transcript_id <- NULL
 minus$transcript_id <- NULL
 
-bulk_plus_expr <- log2(1 + FPKM2TPM(as.numeric(readLines("/MMCI/MS/ExpRegulation/work/data/DEEP_ChIP_HM/01/HepG2/01_HepG2_newBPs_plus_mRNA.y"))))
-bulk_minus_expr <- log2(1 + FPKM2TPM(as.numeric(readLines("/MMCI/MS/ExpRegulation/work/data/DEEP_ChIP_HM/01/HepG2/01_HepG2_newBPs_minus_mRNA.y"))))
+bulk_plus_expr <- log2(1 + FPKM2TPM(as.numeric(readLines("01_HepG2_newBPs_plus_mRNA.y"))))
+bulk_minus_expr <- log2(1 + FPKM2TPM(as.numeric(readLines("01_HepG2_newBPs_minus_mRNA.y"))))
 
 hm.plus <- read.table("01_HepG2_newBPs_plus_divergent_100bp.x")
 hm.minus <- read.table("01_HepG2_newBPs_minus_divergent_100bp.x")
 hm.nfr <- read.table("01_HepG2_newBPs_NFR_bin.x")
 
-hm.k122ac.plus <- read.table("/MMCI/MS/ExpRegulation/work/data/DEEP_ChIP_HM/181/H3K122ac/HepG2_plus_100bp.x")
-hm.k122ac.minus <- read.table("/MMCI/MS/ExpRegulation/work/data/DEEP_ChIP_HM/181/H3K122ac/HepG2_minus_100bp.x")
-hm.k122ac.nfr <- as.numeric(readLines("/MMCI/MS/ExpRegulation/work/data/DEEP_ChIP_HM/181/H3K122ac/HepG2_HM_H3K122ac_NFR_bin.x"))
+hm.k122ac.plus <- read.table("HepG2_H3K122ac_plus_100bp.x")
+hm.k122ac.minus <- read.table("HepG2_H3K122ac_minus_100bp.x")
+hm.k122ac.nfr <- as.numeric(readLines("HepG2_HM_H3K122ac_NFR_bin.x"))
 
 hm.plus <- cbind(hm.plus,hm.k122ac.plus)
 hm.minus <- cbind(hm.minus,hm.k122ac.minus)
@@ -70,17 +70,17 @@ hm <- squeezNFR(as.matrix(hm.plus),as.matrix(hm.minus),as.matrix(hm.nfr),hm.bin.
 #hm.plus <- read.table("../../DEEP_ChIP_HM/01/HepG2/HepG2_plus_10bp.x")
 #hm.minus <- read.table("../../DEEP_ChIP_HM/01/HepG2/HepG2_minus_10bp.x")
 
-dnase.plus <- as.matrix(read.table(paste("/MMCI/MS/ExpRegulation/work/data/singleCell/HepG2/DNase/HepG2_newBPs_DNase_plus_100bp.x",sep="")))
-dnase.minus <- as.matrix(read.table(paste("/MMCI/MS/ExpRegulation/work/data/singleCell/HepG2/DNase/HepG2_newBPs_DNase_minus_100bp.x",sep="")))
-dnase.nfr <- as.numeric(readLines("/MMCI/MS/ExpRegulation/work/data/singleCell/HepG2/DNase/HepG2_newBPs_DNase_NFR_bin.x"))
+dnase.plus <- as.matrix(read.table(paste("HepG2_newBPs_DNase_plus_100bp.x",sep="")))
+dnase.minus <- as.matrix(read.table(paste("HepG2_newBPs_DNase_minus_100bp.x",sep="")))
+dnase.nfr <- as.numeric(readLines("HepG2_newBPs_DNase_NFR_bin.x"))
 dnase.bin.cnt <- 40
 
 tf.plus <- read.table("HepG2_newBPs_TF_plus_100bp.x")
 tf.minus <- read.table("HepG2_newBPs_TF_minus_100bp.x")
-tf.nfr <- read.table("/MMCI/MS/ExpRegulation/work/data/ENC_ChIP_HM/TFs/HepG2/HepG2_newBPs_TF_minus_NFRplus.x")
-tf.names <- readLines("/MMCI/MS/ExpRegulation/work/data/ENC_ChIP_HM/TFs/HepG2/HepG2_TF_names.txt")
+tf.nfr <- read.table("HepG2_newBPs_TF_minus_NFRplus.x")
+tf.names <- readLines("HepG2_TF_names.txt")
 
-nfr.coord <- read.table("/MMCI/MS/ExpRegulation/work/data/DEEP_ChIP_HM/01/HepG2/di_NFR_mRNA_HepG2_newBPs_sorted.txt",header=F,col.names = c("chr","start","end"),stringsAsFactors = F)
+nfr.coord <- read.table("di_NFR_mRNA_HepG2_newBPs_sorted.txt",header=F,col.names = c("chr","start","end"),stringsAsFactors = F)
 
 ##################################################################################
 
@@ -91,8 +91,8 @@ cage.minus <- log2(1+as.numeric(readLines("HepG2_newBPs_minus_allBDP_CAGE.y")))
 gc.content <- read.table("GC_content_80bins_NFR_50bp.txt")## It includes the NFR bin it as well
 GC_BINS <- 81
 ##########
-gtf.bp.plus <- read.table("/MMCI/MS/ExpRegulation/work/data/DEEP_ChIP_HM/01/HepG2/di_plus_newBPs_mRNA_HepG2_fullGTF_sorted.txt",header=T,stringsAsFactors=F)
-gtf.bp.minus <- read.table("/MMCI/MS/ExpRegulation/work/data/DEEP_ChIP_HM/01/HepG2/di_minus_newBPs_mRNA_HepG2_fullGTF_sorted.txt",header=T,stringsAsFactors=F)
+gtf.bp.plus <- read.table("di_plus_newBPs_mRNA_HepG2_fullGTF_sorted.txt",header=T,stringsAsFactors=F)
+gtf.bp.minus <- read.table("di_minus_newBPs_mRNA_HepG2_fullGTF_sorted.txt",header=T,stringsAsFactors=F)
 ########## group gene products into PC and NPC groups ##########
 gtf.bp.plus.grouped <- gtf.bp.plus
 gtf.bp.minus.grouped <- gtf.bp.minus
@@ -113,14 +113,11 @@ for(i in seq(nrow(gtf.bp.plus.grouped))){
 gtf.bp.plus <- gtf.bp.plus.grouped
 gtf.bp.minus <- gtf.bp.minus.grouped
 ######## Find and Remove crazy gene MRpL30, form all data ##############
-ens.bp.plus <- read.table("/MMCI/MS/ExpRegulation/work/data/DEEP_ChIP_HM/01/HepG2/di_plus_newBPs_mRNA_HepG2_sorted.txt",col.names=c("ENS","gene","strand","chr","TSS","val"),stringsAsFactors=F)
-ens.bp.minus <- read.table("/MMCI/MS/ExpRegulation/work/data/DEEP_ChIP_HM/01/HepG2/di_minus_newBPs_mRNA_HepG2_sorted.txt",col.names=c("ENS","gene","strand","chr","TSS","val"),stringsAsFactors=F)
+ens.bp.plus <- read.table("di_plus_newBPs_mRNA_HepG2_sorted.txt",col.names=c("ENS","gene","strand","chr","TSS","val"),stringsAsFactors=F)
+ens.bp.minus <- read.table("di_minus_newBPs_mRNA_HepG2_sorted.txt",col.names=c("ENS","gene","strand","chr","TSS","val"),stringsAsFactors=F)
 
 crazy_gene_MRPL30 <- which(ens.bp.plus[,2] == "MRPL30")
 ################################################################################
-#### TBP data for core promoter analysis #######
-tbp.plus <- read.csv("/MMCI/MS/ExpRegulation/work/data/singleCell/TBP_affinity_newBPs/RegulatorTrail - TEPIC_newBPs_plus_input.tepic.zip.csv")
-tbp.minus <- read.csv("/MMCI/MS/ExpRegulation/work/data/singleCell/TBP_affinity_newBPs/RegulatorTrail - TEPIC_newBPs_minus_input.tepic.zip.csv")
 ##################################################################################
 matchingBPs <- NULL
 for(i in seq(nrow(tbp.plus))){
@@ -132,37 +129,6 @@ for(i in seq(nrow(tbp.plus))){
     }
   } 
 }
-#### Removing from bulk ####
-bulk_plus_expr <- bulk_plus_expr[-crazy_gene_MRPL30]
-bulk_minus_expr <- bulk_minus_expr[-crazy_gene_MRPL30]
-
-#### Removing from NFR ####
-nfr.coord <- nfr.coord[-crazy_gene_MRPL30,]
-#### Removing from GTF ####
-gtf.bp.plus <- gtf.bp.plus[-crazy_gene_MRPL30,]
-gtf.bp.minus <- gtf.bp.minus[-crazy_gene_MRPL30,]
-
-#### Removing from HM ####
-hm.plus <- hm.plus[-crazy_gene_MRPL30,]
-hm.minus <- hm.minus[-crazy_gene_MRPL30,]
-hm.nfr <- hm.nfr[-crazy_gene_MRPL30,]
-hm <- hm[-crazy_gene_MRPL30,]
-
-#### Removing from TF ####
-dnase.plus <- dnase.plus[-crazy_gene_MRPL30,]
-dnase.minus <- dnase.minus[-crazy_gene_MRPL30,]
-dnase.nfr <- dnase.nfr[-crazy_gene_MRPL30]
-#### Removing from TF ####
-tf.plus <- tf.plus[-crazy_gene_MRPL30,]
-tf.minus <- tf.minus[-crazy_gene_MRPL30,]
-tf.nfr <- tf.nfr[-crazy_gene_MRPL30,]
-
-#### Removing from CAGE ####
-cage.plus <- cage.plus[-crazy_gene_MRPL30]
-cage.minus <- cage.minus[-crazy_gene_MRPL30]
-#### Removing from GC content ####
-gc.content <- gc.content[-crazy_gene_MRPL30,]
-
 ##################################################################################################################
 ####### swap the gtf files acording to higher expression obtained from single cell #######
 gtf.bp.right.swapped <- gtf.bp.plus
@@ -178,7 +144,6 @@ for(i in seq(hm.cnt)){
   hm.mirrored.idx <- c(hm.mirrored.idx,seq(i*hm.bin.cnt,(i-1)*hm.bin.cnt+1,-1))
 }
 hm[swapped$swap.idx,] <- hm[swapped$swap.idx,hm.mirrored.idx]
-write.table(hm,"/MMCI/MS/ExpRegulation/work/data/singleCell/HepG2/HepG2_newBPs_HM_NFRbin_swapped.x",quote=F,row.names=F,col.names=F,sep="\t")
 ### Plot single cell RNA-seq expression (heatmap) ###
 temp <- bulk_minus_expr
 bulk_minus_expr[swapped$swap.idx] <- bulk_plus_expr[swapped$swap.idx]
@@ -278,8 +243,8 @@ cors.binned <- binningFunc(all.cors,nfr.size,B)
 ###############################################################################################################
 ###############################################################################################################
 ################### correlation VS transcript span ####################
-trans_span_coords_plus <- read.table("transcript/HepG2_scell_plus_transcript_coordinates.txt")
-trans_span_coords_minus <- read.table("transcript/HepG2_scell_minus_transcript_coordinates.txt")
+trans_span_coords_plus <- read.table("HepG2_scell_plus_transcript_coordinates.txt")
+trans_span_coords_minus <- read.table("HepG2_scell_minus_transcript_coordinates.txt")
 span_length_plus <- trans_span_coords_plus[,4] - trans_span_coords_plus[,3]
 span_length_minus <- trans_span_coords_minus[,4] - trans_span_coords_minus[,3]
 p_m_span_diff <- abs(span_length_minus - span_length_plus)
@@ -296,7 +261,7 @@ for(i in seq(B)){
 }
 cors.span.binned <- binningFunc(all.cors,p_m_span_diff,B)
 boxplot_names <- sapply(seq(length(nfr.bins)),function(i)paste(nfr.bins[[i]][1],nfr.bins[[i]][2],sep="-"))
-pdf("/MMCI/MS/ExpRegulation/work/data/singleCell/HepG2/NFR_transcriptSpan_plots_variableBins.pdf")
+pdf(paste(outPath,"/NFR_transcriptSpan_plots_variableBins.pdf",sep=""))
 boxplot(cors.binned$x,na.rm=T,xlab="NFR Bins",names=cors.binned$names,ylab="L-R correlation")
 boxplot(cors.span.binned$x,na.rm=T,names=cors.span.binned$names,las=2,main="transcript span",ylab="L-R correlation",cex.axis=.6)
 dev.off()
@@ -307,28 +272,19 @@ sc <- rowMeans(apply(rbind(minus,plus),2,FUN=as.numeric))
 sc <- log2(1 + sc)
 bulk <- c(bulk_minus_expr,bulk_plus_expr)
 cors_bulkVSsingle <- c(round(cor(bulk,sc,method='s'),2),round(cor(bulk,sc,method='p'),2))
-pdf(paste(cell,"_avgSC_VS_bulk.pdf",sep=""))
+pdf(paste(outPath,"/",cell,"_avgSC_VS_bulk.pdf",sep=""))
 plot(x=sc,y=bulk,pch=20,xlab="avg. single cell log2 expr. (TPM)",ylab="bulk log2 expr. (TPM)",main=paste("HepG2 (plus & minus)\n","Spearman_cor",cors_bulkVSsingle[1],"\nPearson_cor",cors_bulkVSsingle[2]))
 abline(a=0,b=1)
 dev.off()
 ####################################################################
 par(cex.main=.5)
-if(F){
-heatmap(as.matrix(gc.content[clustering.idx,]),Rowv=NA,Colv=NA,labRow = "",labCol = "",RowSideColors = cols,main="HepG2 GC-content",col=my_palette)
-gc.sc.ord <- grab_grob()
-#gplots::heatmap.2(as.matrix(gc.content.nfr.ordered),Rowv=F,Colv=F,labRow = "",labCol = "",dendrogram="n",trace="n",RowSideColors = cols,col = my_palette,main="HepG2 GC-content (NFR sorted)",key=F)
-heatmap(as.matrix(gc.content.nfr.ordered),Rowv=NA,Colv=NA,labRow = "",labCol = "",main="HepG2 GC-content (NFR sorted)",RowSideColors = cols,col=my_palette)
-gc.nfr.ord <- grab_grob()
-heatmap(as.matrix(gc.content.ordered),Rowv=NA,Colv=NA,labRow = "",labCol = "",main="HepG2 GC-content sorted",RowSideColors = cols,col=my_palette)
-gc.gc.ord <- grab_grob()
-}
 gplots::heatmap.2(as.matrix(gc.content[clustering.idx,]),Rowv=F,Colv=F,dendrogram="n",trace="n",labRow = "",labCol = "",RowSideColors = cols,main="HepG2 GC-content",col=my_palette,key=F)
 gc.sc.ord <- grab_grob()
 gplots::heatmap.2(as.matrix(gc.content.nfr.ordered),Rowv=F,Colv=F,labRow = "",labCol = "",dendrogram="n",trace="n",RowSideColors = cols,col = my_palette,main="HepG2 GC-content (NFR sorted)",key=F)
 gc.nfr.ord <- grab_grob()
 gplots::heatmap.2(as.matrix(gc.content.ordered),Rowv=F,Colv=F,labRow = "",labCol = "",main="HepG2 GC-content sorted",dendrogram="n",trace="n",RowSideColors = cols,col=my_palette,key=F)
 gc.gc.ord <- grab_grob()
-pdf(paste(cell,"_",k,"_GC_content_NFRbin_ordered_50bp.pdf",sep=""))
+pdf(paste(outPath,"/",cell,"_",k,"_GC_content_NFRbin_ordered_50bp.pdf",sep=""))
 gplots::heatmap.2(as.matrix(gc.content[clustering.idx,]),Rowv=F,Colv=F,dendrogram="n",trace="n",labRow = "",labCol = "",RowSideColors = cols,main="HepG2 GC-content",col=my_palette,key=T,density.info="n")
 gplots::heatmap.2(as.matrix(gc.content.nfr.ordered),Rowv=F,Colv=F,labRow = "",labCol = "",dendrogram="n",trace="n",RowSideColors = cols,col = my_palette,main="HepG2 GC-content (NFR sorted)",key=T,density.info="n")
 gplots::heatmap.2(as.matrix(gc.content.ordered),Rowv=F,Colv=F,labRow = "",labCol = "",main="HepG2 GC-content sorted",dendrogram="n",trace="n",RowSideColors = cols,col=my_palette,key=T,density.info="n")
@@ -343,7 +299,6 @@ dev.off()
 ###############################################################################################################
 ###############################################################################################################
 
-#gplots::heatmap.2(as.matrix(pm.pairs[clustering.idx,]),Rowv=F,Colv=F,dendrogram = "n",trace="n",labRow = "",labCol = "",RowSideColors = cols,key=F,col = my_palette)#,lwid = c(.5,.5,4.5,.3),lmat=rbind(c(4,4,3,0),c(0,2,1,0)))
 white_side_color <- rep("white",length(cage.minus)) ### For plotting purposes when using grid.draw
 heatmap(as.matrix(pm.pairs[clustering.idx,]),Rowv=NA,Colv=NA,labRow = "",labCol = "",RowSideColors = cols,col = my_palette,revC=T,scale="none",main=cell)
 sc.hamp <- grab_grob()
@@ -359,9 +314,9 @@ for(i in seq(k))
     cors.ttest_res[i,j] <- round(t.test(cors[[i]],cors[[j]],alternative="t")$p.value,3)
 print("single cell BP gene corrlation p-values (t-test):")
 print(cors.ttest_res)
-write.table(cors.ttest_res,paste(cell,"_single_cell_hierarchical_clustering_",k,"_correlation_pvalues.txt"),quote=F,row.names=F,col.names=F)
+write.table(cors.ttest_res,paste(outPath,"/",cell,"_single_cell_hierarchical_clustering_",k,"_correlation_pvalues.txt"),quote=F,row.names=F,col.names=F)
 
-pdf(paste(cell,"_single_cell_hierarchical_clustering_",k,"_correlation.pdf",sep=""))##_downsampling.pdf",sep=""))
+pdf(paste(outPath,"/",cell,"_single_cell_hierarchical_clustering_",k,"_correlation.pdf",sep=""))
 grid.newpage()
 lay <- grid.layout(nrow = 1, ncol=3,widths=c(4,.5,.5))
 pushViewport(viewport(layout = lay))
@@ -400,7 +355,7 @@ for(i in seq(nrow(geneProducts_mat)))
     phyper.pvals[i,j] <- phyper(geneProducts_mat[i,j],m=sum(geneProducts_mat[i,]),n=sum(geneProducts_mat)-sum(geneProducts_mat[i,]),k=sum(geneProducts_mat[,j]),log.p=F,lower.tail=F)
 rownames(phyper.pvals) <- names_geneProducts
 colnames(phyper.pvals) <- seq(4)
-pdf(paste(cell,"_geneProduct_frequencies_",k,".pdf",sep=""))
+pdf(paste(outPath,"/",cell,"_geneProduct_frequencies_",k,".pdf",sep=""))
 par(mar=c(2,4,2,4),oma=c(1,4,2,8),main.cex=.8)
 gplots::heatmap.2(geneProducts_mat,Rowv=F,Colv=F,dendrogram = "n",trace="n",col = my_palette,main="HepG2_geneProducts",notecol="black",notecex=1,cellnote=geneProducts_mat)
 gplots::heatmap.2(phyper.pvals,Rowv=F,Colv=F,dendrogram = "n",trace="n",col = my_palette,main="HepG2_geneProducts\nhypergeo p-values",notecol="black",notecex=1,cellnote=round(phyper.pvals,2))
@@ -422,7 +377,6 @@ for(i in seq(length(unique(clusts)))){
   for(j in seq(length(idx))){
     if(isTRUE(all.equal(as.numeric(left[j,]),as.numeric(right[j,]))))
       next;
-    #pheatmap(rbind(as.numeric(left[j,]),as.numeric(right[j,])),main=i,cluster_rows=F)
     p_m_data <- rbind(as.numeric(left[j,]),as.numeric(right[j,]))
     rownames(p_m_data) <- c(ens.bp.minus$gene[which(ens.bp.minus$ENS == rownames(minus[j,]))],ens.bp.plus$gene[which(ens.bp.plus$ENS == rownames(plus[j,]))])
     gplots::heatmap.2(p_m_data,Rowv=F,Colv=T,dendrogram="n",trace="n",labCol = "",main=i,col=my_palette1,key=T,sepcolor="black",colsep=c(0,ncol(p_m_data)),rowsep=0:nrow(p_m_data),sepwidth=c(0.1,0.005),cexRow=.5)
@@ -433,9 +387,7 @@ for(i in seq(length(unique(clusts)))){
 #########################################################################
 
 tf <- tf.nfr
-#hm.bin.cnt <- 4000
 tf.bin.cnt <- ncol(tf)/length(tf.names)
-#hm <- hm.plus
 tf.mirrored.idx <- NULL
 for(i in seq(length(tf.names))){
   tf.mirrored.idx <- c(tf.mirrored.idx,seq(i*tf.bin.cnt,(i-1)*tf.bin.cnt+1,-1))
@@ -469,7 +421,6 @@ plot.stratified.tf <- function(tf,tf.names,clusts,k,func,func.name,tf.bin.cnt){
 
 
 plot.stratified.hm <- function(hm,clusts,k,func,func.name,bin.cnt,whichHMs){
-  #par(mfrow=c(3,2))
   cols <- rainbow(k)
   hm.heatmaps <- NULL
   hm.names <- c('H3K4me1','H3K4me3','H3K27me3','H3K36me3','H3K9me3','H3K27ac','H3K122ac')
@@ -483,7 +434,6 @@ plot.stratified.hm <- function(hm,clusts,k,func,func.name,bin.cnt,whichHMs){
       idx <- which(clusts==i)
       if(i == 1)
         plot(hm.median[i,],type="l",col=cols[i],ylim=range(hm.median),lwd=3,xaxt='n',bty="n",ann=F,yaxp=c(round(range(hm.median),1),1),main=hm.names[j])
-        #plot(hm.median[i,],type="l",col=cols[i],main=paste(hm.names[j],func.name,sep="_"),ylim=range(hm.median),lwd=3,xaxt='n',bty="n",xlab="",ylab="")
       else
         points(hm.median[i,],type="l",col=cols[i],lwd=3)
     }
@@ -513,9 +463,7 @@ plot.stratified.dnase.heatmap <- function(dnase,clusts,k,bin.cnt){
   print(round(range(medians),1))
   sapply(seq(2,k),function(i)lines(medians[[i]],col=rainbow(k)[i],lwd=3))
   median.grob <- grab_grob()
-  #gplots::heatmap.2(SC_clustered,Rowv=F,Colv=F,dendrogram = "n",trace="n",labRow = "",labCol = "",RowSideColors = cols,main="DNase",key=F)#default color palette, which is a yellow-red kinna scale
   heatmap(SC_clustered,Rowv=NA,Colv=NA,labRow = "",labCol = "",scale="none",revC=T,RowSideColors = white_side_color)#,main="DNase")
-  #gplots::heatmap.2(hm.SC_clustered,Rowv=F,Colv=F,dendrogram = "n",trace="n",labRow = "",labCol = "",RowSideColors = cols,main=paste(hm.names[j],cell,sep="_"),col = my_palette1)#customized palette defined above
   dnase.grab <- grab_grob()
   return(list(heatmap=dnase.grab,median=median.grob))
 }
@@ -540,8 +488,6 @@ plot.stratified.hm.heatmap <- function(hm,clusts,k,bin.cnt,whichHMs){
     }else{
       heatmap(hm.SC_clustered,Rowv=NA,Colv=NA,labRow = "",labCol = "",RowSideColors = white_side_color,scale="none",revC=T)#,main=paste(hm.names[j]))#default color palette, which is a yellow-red kinna scale
     }
-    #gplots::heatmap.2(hm.SC_clustered,Rowv=F,Colv=F,dendrogram = "n",trace="n",labRow = "",labCol = "",RowSideColors = cols,main=paste(hm.names[j]))#default color palette, which is a yellow-red kinna scale
-    #gplots::heatmap.2(hm.SC_clustered,Rowv=F,Colv=F,dendrogram = "n",trace="n",labRow = "",labCol = "",RowSideColors = cols,main=paste(hm.names[j],cell,sep="_"),col = my_palette1)#customized palette defined above
     hm.heatmaps[[j]] <- grab_grob()
   }
   return(hm.heatmaps)
@@ -581,33 +527,21 @@ plot.hm.heatmap <- function(hm,clusts,k,bin.cnt,whichHMs){
   }
   return(hm.heatmaps)
 }
-#if(F){## I added this while I was in the liver meeting, because the TF data is not ready according to the newBPs (1244)
-pdf(paste(cell,"_TF_stratified_swpapped_mirrored_NFRbin_100bp_",k,"clusters.pdf",sep=""))
+pdf(paste(outPath,"/",cell,"_TF_stratified_swpapped_mirrored_NFRbin_100bp_",k,"clusters.pdf",sep=""))
 par(mfrow=c(2,2))
 plot.stratified.tf(tf,tf.names,clusts,k,median,func.name ="median",(tf.bin.cnt))
 plot.stratified.tf(tf,tf.names,clusts,k,mean,func.name="mean",(tf.bin.cnt))
 dev.off()
-#}
 
-pdf(paste(cell,"_HM_stratified_swpapped_mirrored_100bp_heatmapRawData_log2Scaled_NFRbin_yellowRedColor.pdf",sep=""))
+pdf(paste(outPath,"/",cell,"_HM_stratified_swpapped_mirrored_100bp_heatmapRawData_log2Scaled_NFRbin_yellowRedColor.pdf",sep=""))
 hm.grob <- plot.stratified.hm.heatmap(log2(1+as.matrix(hm)),clusts,k,(hm.bin.cnt),seq(hm.cnt))
 dev.off()
 #####################
-pdf(paste(cell,"_HM_stratified_swpapped_mirrored_NFRbin_100bp.pdf",sep=""))
-#pdf(paste("HepG2_HM_stratified_swpapped_mirrored_1bp_",k,"clusters.pdf",sep=""))
+pdf(paste(outPath,"/",cell,"_HM_stratified_swpapped_mirrored_NFRbin_100bp.pdf",sep=""))
 plot.stratified.hm(hm,clusts,k,median,func.name ="median",(hm.bin.cnt),seq(hm.cnt))
 plot.stratified.hm(hm,clusts,k,mean,func.name="mean",(hm.bin.cnt),seq(hm.cnt))
 dev.off()
 ##################################################################################################################
-if(F){
-pdf(paste(cell,"_HM_stratified_swpapped_mirrored_NFRbin_100bp_enhancersOnly_",k,"clusters.pdf",sep=""))
-plot.stratified.hm(hm,clusts,k,median,func.name ="median",(hm.bin.cnt),c(1,6,7))
-plot.stratified.hm(hm,clusts,k,mean,func.name="mean",(hm.bin.cnt),c(1,6,7))
-dev.off()
-}
-##################################################################################################################
-##################################################################################################################
-#hm_median_log.grobs <- plot.stratified.hm(log2(1+hm),clusts,k,median,func.name ="median",(hm.bin.cnt),seq(hm.cnt))
 hm_median.grobs <- plot.stratified.hm(hm,clusts,k,median,func.name ="median",(hm.bin.cnt),seq(hm.cnt))
 hm.grobs <- plot.stratified.hm.heatmap(log2(1+as.matrix(hm)),clusts,k,(hm.bin.cnt),seq(hm.cnt))
 dnase.grob.res <- plot.stratified.dnase.heatmap(dnase,clusts,k,dnase.bin.cnt)
@@ -618,21 +552,7 @@ dnase.grob <- dnase_log.grob.res$heatmap
 plot(seq(10),col="white",bty="n",xaxt="n",ann=F,yaxt="n")
 blank_grob <- grab_grob()
 
-pdf(paste(cell,"_HM_DNase_stratified_swpapped_",k,"clusters.pdf",sep=""))
-### I discussed with Marcel, and we decided that it should be no problem to show the median on the non-log-transformed data
-if(F){
-  ##### Showing the log transformed data for both heatmaps and median signal
-  grid.newpage()
-  lay <- grid.layout(nrow = 2, ncol=8,heights=unit(c(.3,.8),rep("null",2)))#,widths=unit(rep(,8),"inches"))
-  pushViewport(viewport(layout = lay))
-  for(i in seq(7)){
-    grid.draw(editGrob(hm_median_log.grobs[[i]], vp=viewport(layout.pos.row = 1,layout.pos.col = i, clip=TRUE)))
-    grid.draw(editGrob(hm.grobs[[i]], vp=viewport(layout.pos.row = 2,layout.pos.col = i, clip=TRUE)))
-  }
-  grid.draw(editGrob(dnase_log.grob.res$median, vp=viewport(layout.pos.row = 1,layout.pos.col = 8, clip=TRUE)))
-  grid.draw(editGrob(dnase_log.grob.res$heatmap, vp=viewport(layout.pos.row = 2,layout.pos.col = 8, clip=TRUE)))
-  upViewport(1)
-}
+pdf(paste(outPath,"/",cell,"_HM_DNase_stratified_swpapped_",k,"clusters.pdf",sep=""))
 ##### Showing the non-logged median results
 grid.newpage()
 lay <- grid.layout(nrow = 2, ncol=8,heights=unit(c(.2,.8),rep("null",2)))#,widths=unit(rep(,8),"inches"))
@@ -666,7 +586,7 @@ writeLines(as.character(mann_withney_res),paste(cell,"_CAGE_pvalues_",k,"cluster
 df <- data.frame(cage=c(cage.plus,cage.minus),TSS=c(rep("plus",times=length(cage.plus)),rep("minus",times=length(cage.minus))),cluster=c(clusts,clusts))
 df.plus <- data.frame(cage=c(cage.plus),TSS=rep("plus",times=length(cage.plus)),cluster=clusts)
 df.minus <- data.frame(cage=c(cage.minus),TSS=rep("minus",times=length(cage.plus)),cluster=clusts)
-pdf(paste(cell,"_CAGE_stratified_",k,"clusters.pdf",sep=""))
+pdf(paste(outPath,"/",cell,"_CAGE_stratified_",k,"clusters.pdf",sep=""))
 my.vioplot(merged.strs,rep(rainbow(k),each=2),"HepG2 CAGE (minus_plus)",names=paste(rep(c("minus","plus"),times=k),rep(seq(k),each=2),sep="_"))
 ggplot(df,aes(TSS,cage,fill=as.factor(cluster)))+geom_violin()#draw_quantiles = c(0.25, 0.5, 0.75),colour = "#3366FF")
 ggplot(df.plus,aes(cage,x=TSS,fill=as.factor(cluster)))+geom_violin(draw_quantiles = c(0.25, 0.5, 0.75))
@@ -682,23 +602,10 @@ nfr.ttest_res <- matrix(NA,ncol=k,nrow=k)
 for(i in seq(k))
   for(j in seq(k))
     nfr.ttest_res[i,j] <- round(t.test(nfr.sizes[[i]],nfr.sizes[[j]],alternative="t",paired=F)$p.value,3)
-write.table(nfr.ttest_res,paste(cell,"_NFR_sizes_pvalues_",k,"clusters.txt",sep=""),quote=F,row.names=F,col.names=F)
+write.table(nfr.ttest_res,paste(outPath,"/",cell,"_NFR_sizes_pvalues_",k,"clusters.txt",sep=""),quote=F,row.names=F,col.names=F)
 
-pdf(paste(cell,"_clustering_NFR_sizes_",k,"clusters.pdf",sep=""))
+pdf(paste(outPath,"/",cell,"_clustering_NFR_sizes_",k,"clusters.pdf",sep=""))
 my.vioplot(nfr.sizes,rainbow(k),"HepG2 NFR size",names=seq(k))
 boxplot(nfr.sizes,col=rainbow(k),main="HepG2 NFR size",names=seq(k))
 dev.off()
 ##################################################################################################################
-##################################################################################################################
-##################################################################################################################
-if(F){
-  for(j in seq(6))
-    for(i in seq(k)){
-      idx <- which(clusts==i)
-      for(l in idx)
-        if(l == 1)
-          plot(as.numeric(hm[l,seq((j-1)*40+1,j*40)]),type="l",col=cols[i],main=hm.names[j],ylim = range(hm[,seq((j-1)*40+1,j*40)]))
-        else
-          points(as.numeric(hm[l,seq((j-1)*40+1,j*40)]),type="l",col=cols[i])
-    }
-}
