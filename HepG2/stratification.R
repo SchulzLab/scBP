@@ -1,10 +1,7 @@
 library(ggplot2)
 library(pheatmap)
-#load("/MMCI/MS/ExpRegulation/work/data/singleCell/HepG2/HepG2_hclust.RData")
-#load("/MMCI/MS/ExpRegulation/work/data/singleCell/HepG2/HepG2_hclust_5.RData")
-#load("/MMCI/MS/ExpRegulation/work/data/singleCell/HepG2/HepG2_single_cell_expr_swapped.RData")
-load("/MMCI/MS/ExpRegulation/work/data/singleCell/HepG2/HepG2_hclust_transcript_4.RData")
-load("/MMCI/MS/ExpRegulation/work/data/singleCell/HepG2/HepG2_single_cell_expr_swapped_transcript.RData")
+load("HepG2_hclust_transcript_4.RData")
+load("HepG2_single_cell_expr_swapped_transcript.RData")
 
 ##################################################################################################################
 ##################################################################################################################
@@ -43,30 +40,19 @@ FPKM2TPM <- function(fpkm){
 }
 ##################################################################################################################
 
-############# Merge the smallest cluster #############
-
-#clusts[which(clusts==5)] <- 3
-#clusts[which(clusts==6)] <- 5
-#k <- 5
-k <- 6 ### with the new BPs clustering, I'm not merging the clusters anymore
-k <- 5 ### we decided to stick to k=5 (cf. the trello board discussions)
-k <- 4 ### With transcript data and 2000bp set to threshold for nearby TSSs
-
-######################################################
-
 cell <- "HepG2_newBPs_transcriptClustering"
 
-plus <- read.table("/MMCI/MS/ExpRegulation/work/data/singleCell/HepG2/transcript/HepG2_scell_plus_transcript_expression.txt",header=T,row.names = 1)
-minus <- read.table("/MMCI/MS/ExpRegulation/work/data/singleCell/HepG2/transcript/HepG2_scell_minus_transcript_expression.txt",header=T,row.names = 1)
+plus <- read.table("HepG2_scell_plus_transcript_expression.txt",header=T,row.names = 1)
+minus <- read.table("HepG2_scell_minus_transcript_expression.txt",header=T,row.names = 1)
 plus$transcript_id <- NULL
 minus$transcript_id <- NULL
 
 bulk_plus_expr <- log2(1 + FPKM2TPM(as.numeric(readLines("/MMCI/MS/ExpRegulation/work/data/DEEP_ChIP_HM/01/HepG2/01_HepG2_newBPs_plus_mRNA.y"))))
 bulk_minus_expr <- log2(1 + FPKM2TPM(as.numeric(readLines("/MMCI/MS/ExpRegulation/work/data/DEEP_ChIP_HM/01/HepG2/01_HepG2_newBPs_minus_mRNA.y"))))
 
-hm.plus <- read.table("/MMCI/MS/ExpRegulation/work/data/DEEP_ChIP_HM/01/HepG2/HepG2_newBPs_plus_100bp.x")
-hm.minus <- read.table("/MMCI/MS/ExpRegulation/work/data/DEEP_ChIP_HM/01/HepG2/HepG2_newBPs_minus_100bp.x")
-hm.nfr <- read.table("/MMCI/MS/ExpRegulation/work/data/DEEP_ChIP_HM/01/HepG2/HepG2_HM_NFR_bin.x")
+hm.plus <- read.table("01_HepG2_newBPs_plus_divergent_100bp.x")
+hm.minus <- read.table("01_HepG2_newBPs_minus_divergent_100bp.x")
+hm.nfr <- read.table("01_HepG2_newBPs_NFR_bin.x")
 
 hm.k122ac.plus <- read.table("/MMCI/MS/ExpRegulation/work/data/DEEP_ChIP_HM/181/H3K122ac/HepG2_plus_100bp.x")
 hm.k122ac.minus <- read.table("/MMCI/MS/ExpRegulation/work/data/DEEP_ChIP_HM/181/H3K122ac/HepG2_minus_100bp.x")
@@ -89,8 +75,8 @@ dnase.minus <- as.matrix(read.table(paste("/MMCI/MS/ExpRegulation/work/data/sing
 dnase.nfr <- as.numeric(readLines("/MMCI/MS/ExpRegulation/work/data/singleCell/HepG2/DNase/HepG2_newBPs_DNase_NFR_bin.x"))
 dnase.bin.cnt <- 40
 
-tf.plus <- read.table("/MMCI/MS/ExpRegulation/work/data/ENC_ChIP_HM/TFs/HepG2/HepG2_newBPs_TF_plus_100bp.x")
-tf.minus <- read.table("/MMCI/MS/ExpRegulation/work/data/ENC_ChIP_HM/TFs/HepG2/minus/HepG2_newBPs_TF_minus_100bp.x")
+tf.plus <- read.table("HepG2_newBPs_TF_plus_100bp.x")
+tf.minus <- read.table("HepG2_newBPs_TF_minus_100bp.x")
 tf.nfr <- read.table("/MMCI/MS/ExpRegulation/work/data/ENC_ChIP_HM/TFs/HepG2/HepG2_newBPs_TF_minus_NFRplus.x")
 tf.names <- readLines("/MMCI/MS/ExpRegulation/work/data/ENC_ChIP_HM/TFs/HepG2/HepG2_TF_names.txt")
 
@@ -99,11 +85,10 @@ nfr.coord <- read.table("/MMCI/MS/ExpRegulation/work/data/DEEP_ChIP_HM/01/HepG2/
 ##################################################################################
 
 
-cage.plus <- log2(1+as.numeric(readLines("/MMCI/MS/ExpRegulation/work/data/ENC_ChIP_HM/plus/HepG2/HepG2_newBPs_plus_allBDP_CAGE.y")))
-cage.minus <- log2(1+as.numeric(readLines("/MMCI/MS/ExpRegulation/work/data/ENC_ChIP_HM/plus/HepG2/HepG2_newBPs_minus_allBDP_CAGE.y")))
+cage.plus <- log2(1+as.numeric(readLines("HepG2_newBPs_plus_allBDP_CAGE.y")))
+cage.minus <- log2(1+as.numeric(readLines("HepG2_newBPs_minus_allBDP_CAGE.y")))
 ##########
-gc.content <- read.table("/MMCI/MS/ExpRegulation/work/data/singleCell/HepG2/GC_content/GC_content_40bins_NFR.txt")## It includes the NFR bin it as well
-gc.content <- read.table("/MMCI/MS/ExpRegulation/work/data/singleCell/HepG2/GC_content/GC_content_80bins_NFR_50bp.txt")## It includes the NFR bin it as well
+gc.content <- read.table("GC_content_80bins_NFR_50bp.txt")## It includes the NFR bin it as well
 GC_BINS <- 81
 ##########
 gtf.bp.plus <- read.table("/MMCI/MS/ExpRegulation/work/data/DEEP_ChIP_HM/01/HepG2/di_plus_newBPs_mRNA_HepG2_fullGTF_sorted.txt",header=T,stringsAsFactors=F)
