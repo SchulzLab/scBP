@@ -1,3 +1,7 @@
+cell <- "HepG2_newBPs_transcriptClustering"
+outPath <- ""
+##################################################################################################################
+##################################################################################################################
 library(ggplot2)
 library(pheatmap)
 load("HepG2_hclust_transcript_4.RData")
@@ -40,7 +44,6 @@ FPKM2TPM <- function(fpkm){
 }
 ##################################################################################################################
 
-cell <- "HepG2_newBPs_transcriptClustering"
 
 plus <- read.table("HepG2_scell_plus_transcript_expression.txt",header=T,row.names = 1)
 minus <- read.table("HepG2_scell_minus_transcript_expression.txt",header=T,row.names = 1)
